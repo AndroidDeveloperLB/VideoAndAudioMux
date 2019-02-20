@@ -14,13 +14,6 @@ object VideoAndAudioMuxer {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @WorkerThread
     fun joinVideoAndAudio(videoFile: File, audioFile: File, outputFile: File): Boolean {
-//            val baseDir = Environment.getExternalStorageDirectory().absolutePath
-//            val videoFile = File(baseDir, "test.mkv")
-//            val audioFile = File(baseDir, "test.aac")
-//            val videoFile = File(baseDir, "video_18_sec.mp4")
-//            val audioFile = File(baseDir, "audio_4_sec.aac")
-//            val audioFile = File(baseDir, "audio_40_sec.m4a")
-//            val outputFile = File(baseDir, "output.mp4")
         try {
             //            val videoMediaMetadataRetriever = MediaMetadataRetriever()
             //            videoMediaMetadataRetriever.setDataSource(videoFile.absolutePath)
