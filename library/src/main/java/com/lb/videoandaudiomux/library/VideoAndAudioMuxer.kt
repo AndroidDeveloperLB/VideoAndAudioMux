@@ -1,17 +1,14 @@
 package com.lb.videoandaudiomux.library
 
-import android.annotation.TargetApi
 import android.media.MediaCodec
 import android.media.MediaExtractor
 import android.media.MediaMuxer
-import android.os.Build
 import androidx.annotation.WorkerThread
 import java.io.File
 import java.nio.ByteBuffer
 
 object VideoAndAudioMuxer {
     //   based on:  https://stackoverflow.com/a/31591485/878126
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @WorkerThread
     fun joinVideoAndAudio(videoFile: File, audioFile: File, outputFile: File): Boolean {
         try {
