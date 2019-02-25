@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
                         context.resources.openRawResource(audioRawResId).toFile(audioFile)
                     }
                     val newOutputFile = File(parentFile, "outputFile.vid")
-                    Log.d("AppLog", "muxing...")
+                    Log.d("AppLog", "muxing... output: "+newOutputFile.absoluteFile)
                     val success = VideoAndAudioMuxer.joinVideoAndAudio(videoFile, audioFile, newOutputFile)
                     Log.d("AppLog", "done muxing. success?$success")
                     muxState.postValue(MuxState.IDLE(if (success) newOutputFile else null))

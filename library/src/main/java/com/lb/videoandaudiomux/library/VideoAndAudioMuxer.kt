@@ -31,7 +31,7 @@ object VideoAndAudioMuxer {
             //            videoMediaMetadataRetriever.release()
             //            audioMediaMetadataRetriever.release()
             outputFile.delete()
-            outputFile.createNewFile()
+//            outputFile.createNewFile()
             val muxer = MediaMuxer(outputFile.absolutePath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
             val sampleSize = 256 * 1024
             //video
@@ -61,26 +61,24 @@ object VideoAndAudioMuxer {
             while (true) {
                 videoBufferInfo.size = videoExtractor.readSampleData(videoBuf, 0)
                 audioBufferInfo.size = audioExtractor.readSampleData(audioBuf, 0)
-                if (audioBufferInfo.size < 0) {
-                    //                    Log.d("AppLog", "reached end of audio, looping...")
-                    //TODO somehow start from beginning of the audio again, for looping till the video ends
-                    //                    audioExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC)
-                    //                    audioBufferInfo.size = audioExtractor.readSampleData(audioBuf, 0)
-                }
-                if (videoBufferInfo.size < 0 || audioBufferInfo.size < 0) {
-//                    Log.d("AppLog", "reached end of video")
+                //TODO when detected that the audio is shorter than the video, somehow start from beginning of the audio again, for looping till the video ends
+                if (videoBufferInfo.size < 0 && audioBufferInfo.presentationTimeUs >= videoBufferInfo.presentationTimeUs) {
+//                    Log.d("AppLog", "stopping to mux...")
                     videoBufferInfo.size = 0
                     audioBufferInfo.size = 0
                     break
-                } else {
-                    //                    val donePercentage = videoExtractor.sampleTime / minimalDurationInMs / 10L
-                    //                    Log.d("AppLog", "$donePercentage")
-                    // video muxing
+                }
+                //                    val donePercentage = videoExtractor.sampleTime / minimalDurationInMs / 10L
+                //                    Log.d("AppLog", "$donePercentage")
+                // video muxing
+                if (videoBufferInfo.size >= 0) {
                     videoBufferInfo.presentationTimeUs = videoExtractor.sampleTime
                     videoBufferInfo.flags = videoExtractor.sampleFlags
                     muxer.writeSampleData(videoTrack, videoBuf, videoBufferInfo)
                     videoExtractor.advance()
-                    // audio muxing
+                }
+                // audio muxing
+                if (audioBufferInfo.size >= 0) {
                     audioBufferInfo.presentationTimeUs = audioExtractor.sampleTime
                     audioBufferInfo.flags = audioExtractor.sampleFlags
                     muxer.writeSampleData(audioTrack, audioBuf, audioBufferInfo)
@@ -93,7 +91,7 @@ object VideoAndAudioMuxer {
             return true
         } catch (e: Exception) {
             e.printStackTrace()
-//            Log.d("AppLog", "Error " + e.message)
+//            Log.d("AppLog", e.toString())
         }
         return false
     }
