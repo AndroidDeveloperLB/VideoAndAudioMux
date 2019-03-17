@@ -1,2 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.lb.videoandaudiomux.library"/>
+<manifest package="com.lb.videoandaudiomux.library"/>
